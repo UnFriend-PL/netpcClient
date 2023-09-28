@@ -1,0 +1,20 @@
+.UserList {
+  color: black;
+  right: 0;
+  min-height: 100vh;
+  flex-basis: 60%;
+  min-width: 60vw;
+  box-sizing: border-box;
+}
+
+.UserRow {
+  padding: 2%;
+  width: 100%;
+  text-align: center;
+}
+.UserRow span {
+  cursor: pointer;
+}
+.Selected {
+  background-color: #2ea2a0;
+}

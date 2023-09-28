@@ -1,0 +1,13 @@
+.UserDeatil {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.UserDeatil span {
+  flex-basis: 100%;
+  padding: 1%;
+}
