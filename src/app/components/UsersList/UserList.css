@@ -5,8 +5,12 @@
   flex-basis: 60%;
   min-width: 60vw;
   box-sizing: border-box;
+  max-height: 100vh;
+  overflow-y: scroll;
 }
-
+.UserRow:nth-of-type(odd) {
+  background-color: #f7f7f7;
+}
 .UserRow {
   padding: 2%;
   width: 100%;

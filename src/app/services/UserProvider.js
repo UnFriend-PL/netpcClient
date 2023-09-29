@@ -5,8 +5,7 @@ import axios from "axios";
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
-  const [isUpToDateData, setIsUp] = useState(true);
-
+  const [isViewToUpdate, setIsViewToUpdate] = useState(false);
   if (user != null) {
     axios.interceptors.request.use(
       (config) => {
@@ -24,7 +23,14 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, isLogged, setIsLogged, isUpToDateData, setIsUp }}
+      value={{
+        user,
+        setUser,
+        isLogged,
+        setIsLogged,
+        isViewToUpdate,
+        setIsViewToUpdate,
+      }}
     >
       {children}
     </UserContext.Provider>

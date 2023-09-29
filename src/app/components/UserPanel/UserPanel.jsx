@@ -3,12 +3,13 @@ import { API_BASE_URL, UserContext } from "../Context/UserContext";
 import { useContext, useState } from "react";
 import "./UserPanel.css";
 import axios from "axios";
+import RegisterForm from "./RegisterForm/RegisterForm";
 
 export default function UserPanel() {
   const { user, setUser } = useContext(UserContext);
   const { isLogged, setIsLogged } = useContext(UserContext);
   const [userLoginDto, setUserLoginDto] = useState({ password: "", email: "" });
-
+  const [isRegistering, setIsRegistering] = useState(false);
   const logoutUser = async () => {
     setUser(null);
     setIsLogged(false);
@@ -20,7 +21,6 @@ export default function UserPanel() {
         userLoginDto
       );
       const data = response.data;
-      console.log(data);
       if (data.success) {
         setUser(data.data);
         setIsLogged(true);
@@ -34,8 +34,19 @@ export default function UserPanel() {
       {isLogged ? (
         <>
           <div className="User-Form">
-            <span>Welcome {user.firstName}</span>
+            <span className="User-Form-info">
+              Welcome {user.firstName} {user.lastName}
+            </span>
             <button onClick={logoutUser}>Log Out</button>
+            <button onClick={setIsRegistering}>Register new contact</button>
+            {isRegistering ? (
+              <RegisterForm
+                setIsRegistering={setIsRegistering}
+                isRegistering={isRegistering}
+              ></RegisterForm>
+            ) : (
+              <></>
+            )}
           </div>
         </>
       ) : (

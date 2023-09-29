@@ -32,6 +32,7 @@
   background-color: lightgrey;
   color: black;
   padding: 10px 20px;
+  margin: 10%;
   border: none;
   cursor: pointer;
 }
@@ -43,4 +44,9 @@
 
 .User-Form a:hover {
   text-decoration: underline;
+}
+.User-Form-info {
+  flex-basis: 100%;
+  text-align: center;
+  padding: 5%;
 }

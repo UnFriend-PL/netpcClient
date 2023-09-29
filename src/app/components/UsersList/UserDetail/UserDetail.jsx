@@ -18,6 +18,9 @@ export default function UserDeatil({
     phone: userToShow.phone,
     firstName: userToShow.firstName,
     lastName: userToShow.lastName,
+    subContactCategoryId: userToShow.subContactCategoryId,
+    contactCategory: userToShow.contactCategory,
+    date: userToShow.date,
   });
   const handleEditClick = () => {
     if (isEditing) setIsEditing(false);
@@ -33,7 +36,6 @@ export default function UserDeatil({
       .catch((error) => console.log("Error:", error));
   };
   const handleDelteClick = () => {
-    console.log(selectedUserId);
     axios
       .delete(`${API_BASE_URL}/api/Users/DeleteUser`, {
         data: { userId: selectedUserId },
@@ -41,7 +43,6 @@ export default function UserDeatil({
       .then((response) => {
         setIsEditing(false);
         setSelectedUserId(null);
-        console.log(response.data.data);
       })
       .catch((error) => console.log("Error:", error));
   };
@@ -121,6 +122,18 @@ export default function UserDeatil({
             <span>
               <strong>E-mail:</strong>
               {userToShow.email}
+            </span>
+            <span>
+              <strong>Birthday:</strong>
+              {userToShow.birthday}
+            </span>
+            <span>
+              <strong>Category:</strong>
+              {userToShow.contactCategory}
+            </span>
+            <span>
+              <strong>Sub Category:</strong>
+              {userToShow.subContactCategoryId}
             </span>
           </>
         )}
