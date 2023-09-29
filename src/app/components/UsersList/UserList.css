@@ -18,3 +18,6 @@
 .Selected {
   background-color: #2ea2a0;
 }
+.UserRow:hover {
+  background-color: #d7d7d7;
+}

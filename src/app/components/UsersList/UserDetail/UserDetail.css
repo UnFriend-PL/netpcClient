@@ -11,3 +11,18 @@
   flex-basis: 100%;
   padding: 1%;
 }
+.UserDetailButtons {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.UserDetailButtons button {
+  padding: 1%;
+  background-color: white;
+  margin: 2%;
+}
+.UserDetailButtons button:hover {
+  background-color: #ff9494;
+}

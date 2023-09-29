@@ -1,11 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import "./UserList.css";
 import axios from "axios";
-import { API_BASE_URL } from "../Context/UserContext";
+import { API_BASE_URL, UserContext } from "../Context/UserContext";
 import React from "react";
 import UserDeatil from "./UserDetail/UserDeatil";
 export default function UsersList() {
+  const { user, setUser } = useContext(UserContext);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
   const UsersQuery = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/Users/Users`);
@@ -14,6 +17,7 @@ export default function UsersList() {
       if (data.success) {
         setUsers(data.data);
         console.log(data.data);
+        setisUpToDateData(true);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -22,8 +26,7 @@ export default function UsersList() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     UsersQuery();
-  }, []);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  }, [user, selectedUserId]);
 
   return (
     <>
@@ -42,7 +45,12 @@ export default function UsersList() {
             <div>
               {user.userId === selectedUserId ? (
                 <>
-                  <UserDeatil key={index} user={user}></UserDeatil>
+                  <UserDeatil
+                    key={index}
+                    user={user}
+                    selectedUserId={selectedUserId}
+                    setSelectedUserId={setSelectedUserId}
+                  ></UserDeatil>
                 </>
               ) : (
                 <></>
