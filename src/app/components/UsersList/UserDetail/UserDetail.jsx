@@ -3,10 +3,12 @@ import { useContext, useState } from "react";
 import { API_BASE_URL, UserContext } from "../../Context/UserContext";
 import axios from "axios";
 import "./UserDetail.css";
+import ReactDatePicker from "react-datepicker";
 export default function UserDeatil({
   user: userToShow,
   selectedUserId,
   setSelectedUserId,
+  contactCategories,
 }) {
   const { isLogged, setIsLogged } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
@@ -19,9 +21,11 @@ export default function UserDeatil({
     firstName: userToShow.firstName,
     lastName: userToShow.lastName,
     subContactCategoryId: userToShow.subContactCategoryId,
-    contactCategory: userToShow.contactCategory,
-    date: userToShow.date,
+    contactCategoryId: userToShow.contactCategory,
+    birthday: userToShow.date,
   });
+  const date = new Date(userToShow.birthday);
+  const defaultDateValue = date.toLocaleDateString("en-CA");
   const handleEditClick = () => {
     if (isEditing) setIsEditing(false);
     else setIsEditing(true);
@@ -104,6 +108,50 @@ export default function UserDeatil({
                 defaultValue={userToShow.email}
               ></input>
             </span>
+            <span>
+              <strong>Birthday:</strong>
+              <input
+                type="date"
+                onChange={(e) =>
+                  setUserDto({ ...userDto, birthday: e.target.value })
+                }
+                defaultValue={new Date(userToShow.birthday).toLocaleDateString(
+                  "en-CA"
+                )}
+              ></input>
+            </span>
+            <span>
+              <strong>Category:</strong>
+              <select
+                defaultValue={userToShow.contactCategory}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setUserDto({ ...userDto, contactCategoryId: e.target.value });
+                }}
+              >
+                {contactCategories.map((category) => (
+                  <option
+                    key={category.contactCategoryId}
+                    value={category.contactCategoryId}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </span>
+            <span>
+              <strong>Sub Category:</strong>
+              <input
+                type="text"
+                defaultValue={userToShow.subContactCategoryId}
+                onChange={(e) =>
+                  setUserDto({
+                    ...userDto,
+                    subContactCategoryId: e.target.value,
+                  })
+                }
+              ></input>
+            </span>
           </>
         ) : (
           <>
@@ -129,7 +177,15 @@ export default function UserDeatil({
             </span>
             <span>
               <strong>Category:</strong>
-              {userToShow.contactCategory}
+              {contactCategories.map((category, index) => (
+                <span key={index}>
+                  {userToShow.contactCategory == category.contactCategoryId ? (
+                    <>{category.name}</>
+                  ) : (
+                    <></>
+                  )}
+                </span>
+              ))}
             </span>
             <span>
               <strong>Sub Category:</strong>

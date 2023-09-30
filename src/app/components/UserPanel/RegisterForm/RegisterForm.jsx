@@ -25,7 +25,6 @@ export default function RegisterForm({ isRegistering, setIsRegistering }) {
       );
       const data = response.data.data;
       if (data) {
-        // setUser(user);
         setIsViewToUpdate(!isViewToUpdate);
         setIsRegistering(false);
       }
@@ -83,9 +82,9 @@ export default function RegisterForm({ isRegistering, setIsRegistering }) {
           <input
             type="number"
             defaultValue={userDto.contactCategoryId}
-            onChange={(e) =>
-              setUserDto({ ...userDto, contactCategoryId: e.target.value })
-            }
+            onChange={(e) => {
+              setUserDto({ ...userDto, contactCategoryId: e.target.value });
+            }}
           ></input>
         </span>
         <span>
@@ -105,7 +104,9 @@ export default function RegisterForm({ isRegistering, setIsRegistering }) {
             onChange={(e) =>
               setUserDto({ ...userDto, birthday: e.target.value })
             }
-            defaultValue={userDto.birthday}
+            defaultValue={new Date(...userDto.birthday).toLocaleDateString(
+              "en-CA"
+            )}
           ></input>
         </span>
         <button onClick={handleRegister}>Register</button>

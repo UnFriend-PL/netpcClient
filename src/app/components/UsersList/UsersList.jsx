@@ -21,15 +21,34 @@ export default function UsersList() {
       console.error("Error:", error);
     }
   };
+  const contactCategoriesQuery = async () => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/api/ContactCategories/ContactCategories`
+      );
+      const data = response.data.data;
+      if (data) {
+        setContactCategories(data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   const [users, setUsers] = useState([]);
+  const [contactCategories, setContactCategories] = useState(
+    contactCategoriesQuery
+  );
+
   useEffect(() => {
     UsersQuery();
+    // contactCategoriesQuery();
+    // console.log(contactCategories);
+    // console.log(user);
   }, [user, selectedUserId, isViewToUpdate]);
 
   return (
     <>
       <div className="UserList">
-        {console.log(users)}
         {users.map((user, index) => (
           <div
             key={index}
@@ -49,6 +68,7 @@ export default function UsersList() {
                     user={user}
                     selectedUserId={selectedUserId}
                     setSelectedUserId={setSelectedUserId}
+                    contactCategories={contactCategories}
                   ></UserDeatil>
                 </>
               ) : (
