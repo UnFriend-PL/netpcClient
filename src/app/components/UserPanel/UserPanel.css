@@ -27,7 +27,10 @@
   color: lightgrey;
   border: 1px solid lightgrey;
 }
-
+.User-Form input[type="select"]::placeholder,
+.User-Form input[type="date"] .User-Form input[type="password"]::placeholder {
+  color: black;
+}
 .User-Form button {
   background-color: lightgrey;
   color: black;

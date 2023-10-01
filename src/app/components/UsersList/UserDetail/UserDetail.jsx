@@ -3,16 +3,16 @@ import { useContext, useState } from "react";
 import { API_BASE_URL, UserContext } from "../../Context/UserContext";
 import axios from "axios";
 import "./UserDetail.css";
-import ReactDatePicker from "react-datepicker";
 export default function UserDeatil({
   user: userToShow,
   selectedUserId,
   setSelectedUserId,
-  contactCategories,
+  // contactCategories,
 }) {
   const { isLogged, setIsLogged } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const { contactCategories, setContactCategories } = useContext(UserContext);
 
   const [userDto, setUserDto] = useState({
     email: userToShow.email,
@@ -20,12 +20,10 @@ export default function UserDeatil({
     phone: userToShow.phone,
     firstName: userToShow.firstName,
     lastName: userToShow.lastName,
-    subContactCategoryId: userToShow.subContactCategoryId,
-    contactCategoryId: userToShow.contactCategory,
+    contactSubCategoryId: userToShow.contactSubCategoryId,
+    contactCategoryId: userToShow.contactCategoryId,
     birthday: userToShow.date,
   });
-  const date = new Date(userToShow.birthday);
-  const defaultDateValue = date.toLocaleDateString("en-CA");
   const handleEditClick = () => {
     if (isEditing) setIsEditing(false);
     else setIsEditing(true);
@@ -75,7 +73,7 @@ export default function UserDeatil({
                 onChange={(e) =>
                   setUserDto({ ...userDto, lastName: e.target.value })
                 }
-                defaultValue={userToShow.lastName}
+                value={userDto.lastName}
               ></input>
             </span>
             <span>
@@ -85,7 +83,7 @@ export default function UserDeatil({
                 onChange={(e) =>
                   setUserDto({ ...userDto, firstName: e.target.value })
                 }
-                defaultValue={userToShow.firstName}
+                value={userDto.firstName}
               ></input>
             </span>
             <span>
@@ -95,7 +93,7 @@ export default function UserDeatil({
                 onChange={(e) =>
                   setUserDto({ ...userDto, phone: e.target.value })
                 }
-                defaultValue={userToShow.phone}
+                value={userDto.phone}
               ></input>
             </span>
             <span>
@@ -105,7 +103,7 @@ export default function UserDeatil({
                 onChange={(e) =>
                   setUserDto({ ...userDto, email: e.target.value })
                 }
-                defaultValue={userToShow.email}
+                value={userDto.email}
               ></input>
             </span>
             <span>
@@ -123,10 +121,13 @@ export default function UserDeatil({
             <span>
               <strong>Category:</strong>
               <select
-                defaultValue={userToShow.contactCategory}
+                value={userDto.contactCategoryId}
                 onChange={(e) => {
                   console.log(e.target.value);
-                  setUserDto({ ...userDto, contactCategoryId: e.target.value });
+                  setUserDto({
+                    ...userDto,
+                    contactCategoryId: Number(e.target.value),
+                  });
                 }}
               >
                 {contactCategories.map((category) => (
@@ -143,11 +144,11 @@ export default function UserDeatil({
               <strong>Sub Category:</strong>
               <input
                 type="text"
-                defaultValue={userToShow.subContactCategoryId}
+                value={userDto.contactSubCategoryId}
                 onChange={(e) =>
                   setUserDto({
                     ...userDto,
-                    subContactCategoryId: e.target.value,
+                    contactSubCategoryId: Number(e.target.value),
                   })
                 }
               ></input>
@@ -156,31 +157,38 @@ export default function UserDeatil({
         ) : (
           <>
             <span>
-              <strong>LastName:</strong>
-              {userToShow.lastName}
+              <strong>LastName: </strong>
+              <input disabled value={userDto.lastName} />
             </span>
             <span>
-              <strong>FirstName:</strong>
-              {userToShow.firstName}
+              <strong>FirstName: </strong>
+              <input disabled value={userDto.firstName} />
             </span>
             <span>
-              <strong>Phone:</strong>
-              {userToShow.phone}
+              <strong>Phone: </strong>
+              <input disabled value={userDto.phone} />
             </span>
             <span>
-              <strong>E-mail:</strong>
-              {userToShow.email}
+              <strong>E-mail: </strong>
+              <input disabled value={userDto.email} />
             </span>
             <span>
-              <strong>Birthday:</strong>
-              {userToShow.birthday}
+              <strong>Birthday: </strong>
+              <input
+                type="date"
+                value={new Date(userToShow.birthday).toLocaleDateString(
+                  "en-CA"
+                )}
+                disabled
+              />
             </span>
             <span>
-              <strong>Category:</strong>
+              <strong>Category: </strong>
               {contactCategories.map((category, index) => (
                 <span key={index}>
-                  {userToShow.contactCategory == category.contactCategoryId ? (
-                    <>{category.name}</>
+                  {userToShow.contactCategoryId ==
+                  category.contactCategoryId ? (
+                    <input disabled value={category.name} />
                   ) : (
                     <></>
                   )}
@@ -188,8 +196,8 @@ export default function UserDeatil({
               ))}
             </span>
             <span>
-              <strong>Sub Category:</strong>
-              {userToShow.subContactCategoryId}
+              <strong>Sub Category: </strong>
+              <input disabled value={userDto.contactSubCategoryId} />
             </span>
           </>
         )}
