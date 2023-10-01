@@ -56,6 +56,7 @@ export default function UserPanel() {
         <>
           <div className="User-Form">
             <h1>Log in</h1>
+            <span>E-mail:</span>
             <input
               type="text"
               value={userLoginDto.email}
@@ -63,6 +64,7 @@ export default function UserPanel() {
                 setUserLoginDto({ ...userLoginDto, email: e.target.value })
               }
             ></input>
+            <span>Password:</span>
             <input
               type="password"
               value={userLoginDto.password}
