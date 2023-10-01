@@ -1,7 +1,7 @@
-## Table of Contents
+# Table of Contents
 1. [Installation](#installation)
 
-## Installation
+# Installation
 **Clone the repository**: Clone the NetPcClient repository to your local machine using the following command in your terminal:
 
 ```bash
