@@ -13,7 +13,7 @@ npm install
 # and
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) with your browser to see aplication.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see aplication and login by default user -> email: admin@example.pl, password: Admin12#.
 
 # Documentation
 
