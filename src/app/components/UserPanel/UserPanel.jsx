@@ -10,10 +10,13 @@ export default function UserPanel() {
   const { isLogged, setIsLogged } = useContext(UserContext);
   const [userLoginDto, setUserLoginDto] = useState({ password: "", email: "" });
   const [isRegistering, setIsRegistering] = useState(false);
+  // Logout user function
   const logoutUser = async () => {
     setUser(null);
     setIsLogged(false);
   };
+
+  // Login user function
   const loginUser = async () => {
     try {
       const response = await axios.post(

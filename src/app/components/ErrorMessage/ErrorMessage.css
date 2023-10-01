@@ -1,0 +1,12 @@
+.error-message {
+  background-color: rgb(255, 113, 113);
+  color: white;
+  position: fixed;
+  min-width: 30%;
+  padding: 1%;
+  left: 33%;
+  top: 48%;
+  min-height: 3vh;
+  text-align: center;
+  font-weight: bold;
+}

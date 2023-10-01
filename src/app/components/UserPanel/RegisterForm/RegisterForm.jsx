@@ -3,7 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { API_BASE_URL, UserContext } from "../../Context/UserContext";
 import axios from "axios";
 import "./RegisterForm.css";
+import { ErrorContext } from "@/app/services/ErrorProvider";
 export default function RegisterForm({ isRegistering, setIsRegistering }) {
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const { setMessage } = useContext(ErrorContext);
   const [userDto, setUserDto] = useState({
     email: "",
     userId: "",
@@ -11,22 +14,46 @@ export default function RegisterForm({ isRegistering, setIsRegistering }) {
     firstName: "",
     lastName: "",
     password: "",
-    contactCategoryId: 0,
+    contactCategoryId: 1,
     contactSubCategoryId: 0,
     subCategoryName: null,
     birthday: "2001-04-21",
   });
   const { isViewToUpdate, setIsViewToUpdate } = useContext(UserContext);
   const { contactCategories, setContactCategories } = useContext(UserContext);
+
+  // Validation functions
+  const validatePasswords = () => {
+    // Password matching validation
+    if (userDto.password !== repeatPassword) {
+      console.error("Passwords do not match");
+      setMessage("Passwords do not match");
+      return false;
+    }
+    return validatePasswordComplexity();
+  };
+
+  const validatePasswordComplexity = () => {
+    // Password complexity validation
+    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15}$/;
+    if (!passwordRegex.test(userDto.password)) {
+      console.error("Password does not meet complexity requirements");
+      setMessage("Password does not meet complexity requirements");
+      return false;
+    }
+    return true;
+  };
   const { contactSubCategories, setContactSubCategories } =
     useContext(UserContext);
+  // Handle registration
   const handleRegister = async () => {
+    if (!validatePasswords()) return;
     try {
       const subCategory = contactCategories.find(
         (c) => c.name === userDto.subCategoryName
       );
-      console.log(subCategory);
-      if (!subCategory) {
+      // Create a new contact subcategory if it doesn't exist
+      if (!subCategory && subCategory != null) {
         const response = await axios.post(
           `${API_BASE_URL}/api/ContactCategories/CreateContactSubCategory`,
           {
@@ -36,10 +63,17 @@ export default function RegisterForm({ isRegistering, setIsRegistering }) {
         );
         const data = response.data.data;
         userDto.contactSubCategoryId = data.contactSubCategoryId;
+      } else if (subCategory == null) {
+        // Set contactSubCategoryId to 0 if subCategory is null
+        setUserDto({
+          ...userDto,
+          contactSubCategoryId: 0,
+        });
       } else {
+        // Use existing contactSubCategoryId if subCategory exists
         userDto.contactSubCategoryId = subCategory.contactSubCategoryId;
       }
-
+      // Register the user
       const response = await axios.post(
         `${API_BASE_URL}/api/Users/Register`,
         userDto
@@ -83,6 +117,13 @@ export default function RegisterForm({ isRegistering, setIsRegistering }) {
             onChange={(e) =>
               setUserDto({ ...userDto, password: e.target.value })
             }
+          ></input>
+        </span>
+        <span>
+          <strong>Repeat Password:</strong>
+          <input
+            type="password"
+            onChange={(e) => setRepeatPassword(e.target.value)}
           ></input>
         </span>
         <span>

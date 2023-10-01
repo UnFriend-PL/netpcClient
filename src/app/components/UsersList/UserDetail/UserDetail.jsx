@@ -15,6 +15,7 @@ export default function UserDeatil({
   const { contactSubCategories, setContactSubCategories } =
     useContext(UserContext);
 
+  // User data and form handling
   const [userDto, setUserDto] = useState({
     email: userToShow.email,
     userId: userToShow.userId,
@@ -26,14 +27,20 @@ export default function UserDeatil({
     birthday: userToShow.date,
     name: "",
   });
+
+  // Handle edit button click
   const handleEditClick = () => {
     if (isEditing) setIsEditing(false);
     else setIsEditing(true);
   };
+
+  // Handle save button click
   const handleSaveClick = async () => {
+    // Check if subcategory exists
     const subCategory = contactCategories.find((c) => c.name === userDto.name);
     console.log(subCategory);
     if (!subCategory) {
+      // Create new subcategory if it doesn't exist
       const response = await axios.post(
         `${API_BASE_URL}/api/ContactCategories/CreateContactSubCategory`,
         {
@@ -48,6 +55,7 @@ export default function UserDeatil({
       userDto.contactSubCategoryId = subCategory.contactSubCategoryId;
     }
 
+    // Update user data
     axios
       .put(`${API_BASE_URL}/api/Users/UpdateUser`, userDto)
       .then((response) => {
@@ -56,6 +64,8 @@ export default function UserDeatil({
       })
       .catch((error) => console.log("Error:", error));
   };
+
+  // Handle delete button click
   const handleDelteClick = () => {
     axios
       .delete(`${API_BASE_URL}/api/Users/DeleteUser`, {
@@ -67,7 +77,9 @@ export default function UserDeatil({
       })
       .catch((error) => console.log("Error:", error));
   };
+
   useEffect(() => {
+    // Find the subcategory based on contactSubCategoryId
     let subCategory = contactSubCategories.find(
       (c) => c.contactSubCategoryId == userDto.contactSubCategoryId
     );
@@ -80,6 +92,7 @@ export default function UserDeatil({
     <>
       <div className="UserDeatil">
         {isLogged ? (
+          // User is logged in
           <div className="UserDetailButtons">
             <button onClick={handleDelteClick}>Delete</button>
             <button onClick={handleEditClick}>Edit</button>
@@ -93,6 +106,7 @@ export default function UserDeatil({
           <></>
         )}
         {isEditing && isLogged ? (
+          // Edit mode
           <>
             <span>
               <strong>Last Name:</strong>
@@ -169,18 +183,6 @@ export default function UserDeatil({
               </select>
             </span>
             <span>
-              {/* <strong>Sub Category:</strong>
-              <input
-                type="text"
-                value={userDto.name}
-                onChange={(e) =>
-                  setUserDto({
-                    ...userDto,
-                    name: e.target.value,
-                  })
-                }
-              ></input> */}
-              {/*  */}
               {userDto.contactCategoryId !== 0 &&
                 userDto.contactCategoryId === 2 && (
                   <>
@@ -227,6 +229,9 @@ export default function UserDeatil({
           </>
         ) : (
           <>
+            {
+              //Display mode
+            }
             <span>
               <strong>LastName: </strong>
               <input disabled value={userDto.lastName} />
@@ -266,18 +271,23 @@ export default function UserDeatil({
                 </span>
               ))}
             </span>
-            <span>
-              <strong>Sub Category: </strong>
-              <input
-                disabled
-                value={
-                  contactSubCategories.find(
-                    (c) =>
-                      c.contactSubCategoryId == userToShow.contactSubCategoryId
-                  )?.name
-                }
-              />
-            </span>
+            {userDto.contactSubCategoryId != 0 ? (
+              <span>
+                <strong>Sub Category: </strong>
+                <input
+                  disabled
+                  value={
+                    contactSubCategories.find(
+                      (c) =>
+                        c.contactSubCategoryId ==
+                        userToShow.contactSubCategoryId
+                    )?.name
+                  }
+                />
+              </span>
+            ) : (
+              <></>
+            )}
           </>
         )}
       </div>

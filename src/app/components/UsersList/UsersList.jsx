@@ -16,6 +16,21 @@ export default function UsersList() {
       const data = response.data;
       if (data.success) {
         setUsers(data.data);
+        console.log(data);
+        //Create main account
+        if (data.data.length == 0) {
+          await axios.post(`${API_BASE_URL}/api/Users/Register`, {
+            email: "admin@example.pl",
+            phone: "123-456-789",
+            firstName: "Admin",
+            lastName: "exampleLastName",
+            password: "Admin12#",
+            contactCategoryId: 2,
+            contactSubCategoryId: 1,
+            birthday: "2001-04-21",
+          });
+          setIsViewToUpdate(!isViewToUpdate);
+        }
       }
     } catch (error) {
       console.error("Error:", error);
