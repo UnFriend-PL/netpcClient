@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Table of Contents
+1. [Installation](#installation)
 
-## Getting Started
-
-First, run the development server:
+## Installation
+**Clone the repository**: Clone the NetPcClient repository to your local machine using the following command in your terminal:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/UnFriend-PL/netpcClient.git
 ```
+Run the application: Navigate to the root directory of the project in your terminal and run the following commands:
+```
+npm install
+# and
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see aplication.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# ErrorProvider service:
+This component provides an error message to its children components using the Context API. It uses the useState hook to manage the error message state.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+# UserProvider service:
+This component provides user-related data and functions to its children components using the Context API. It uses the useState and useEffect hooks to manage state and perform API calls using axios.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Users List component
+ It allows for viewing, editing, and deleting user details.
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- **User List**: Displays a list of users. Users can be selected to view more details.
+- **User Details**: Displays detailed information of a selected user. Details can be edited and saved, or the user can be deleted.
+# User Detail Component
+The component is responsible for displaying, editing, and deleting user details.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features
+- Display user details: The component fetches user details from the context and displays them.
+- Edit user details: The user details can be edited by clicking the "Edit" button. This switches the component to edit mode where the user details can be updated.
+- Delete user: The "Delete" button allows the deletion of the user.
+- Save changes: The "Save" button saves any changes made to the user details.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# UserPanel Component
+The UserPanel component is responsible for managing user authentication and registration.
 
-## Deploy on Vercel
+## Features
+- User Login: The component provides a login form for users to enter their email and password. Upon submission, it sends a POST request to the /api/Users/Login endpoint. If the login is successful, the user's data is stored in the user state and the isLogged state is set to true.
+- User Logout: The component provides a "Log Out" button for users to log out. Clicking this button will set the user state to null and the isLogged state to false.
+- User Registration: The component provides a "Register new contact" button to switch to the registration form. This is controlled by the isRegistering state.
+- Display User Details: If a user is logged in, the component displays a welcome message with the user's first and last name.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
