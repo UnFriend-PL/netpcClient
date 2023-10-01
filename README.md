@@ -1,6 +1,6 @@
 # Table of Contents
 1. [Installation](#installation)
-
+1. [Documentation](#Documentation)
 # Installation
 **Clone the repository**: Clone the NetPcClient repository to your local machine using the following command in your terminal:
 
@@ -14,6 +14,8 @@ npm install
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see aplication.
+
+# Documentation
 
 # ErrorProvider service:
 This component provides an error message to its children components using the Context API. It uses the useState hook to manage the error message state.
