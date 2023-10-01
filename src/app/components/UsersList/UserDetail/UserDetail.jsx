@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { API_BASE_URL, UserContext } from "../../Context/UserContext";
 import axios from "axios";
 import "./UserDetail.css";
@@ -7,12 +7,13 @@ export default function UserDeatil({
   user: userToShow,
   selectedUserId,
   setSelectedUserId,
-  // contactCategories,
 }) {
   const { isLogged, setIsLogged } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const { contactCategories, setContactCategories } = useContext(UserContext);
+  const { contactSubCategories, setContactSubCategories } =
+    useContext(UserContext);
 
   const [userDto, setUserDto] = useState({
     email: userToShow.email,
@@ -23,12 +24,30 @@ export default function UserDeatil({
     contactSubCategoryId: userToShow.contactSubCategoryId,
     contactCategoryId: userToShow.contactCategoryId,
     birthday: userToShow.date,
+    name: "",
   });
   const handleEditClick = () => {
     if (isEditing) setIsEditing(false);
     else setIsEditing(true);
   };
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
+    const subCategory = contactCategories.find((c) => c.name === userDto.name);
+    console.log(subCategory);
+    if (!subCategory) {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/ContactCategories/CreateContactSubCategory`,
+        {
+          contactCategoryId: userDto.contactCategoryId,
+          name: userDto.name,
+        }
+      );
+      const data = response.data.data;
+      userDto.contactSubCategoryId = data.contactSubCategoryId;
+      setContactSubCategories((prevState) => [...prevState, data]);
+    } else {
+      userDto.contactSubCategoryId = subCategory.contactSubCategoryId;
+    }
+
     axios
       .put(`${API_BASE_URL}/api/Users/UpdateUser`, userDto)
       .then((response) => {
@@ -48,6 +67,15 @@ export default function UserDeatil({
       })
       .catch((error) => console.log("Error:", error));
   };
+  useEffect(() => {
+    let subCategory = contactSubCategories.find(
+      (c) => c.contactSubCategoryId == userDto.contactSubCategoryId
+    );
+
+    if (subCategory) {
+      userDto.name = subCategory.name;
+    }
+  }, []);
   return (
     <>
       <div className="UserDeatil">
@@ -141,17 +169,60 @@ export default function UserDeatil({
               </select>
             </span>
             <span>
-              <strong>Sub Category:</strong>
+              {/* <strong>Sub Category:</strong>
               <input
                 type="text"
-                value={userDto.contactSubCategoryId}
+                value={userDto.name}
                 onChange={(e) =>
                   setUserDto({
                     ...userDto,
-                    contactSubCategoryId: Number(e.target.value),
+                    name: e.target.value,
                   })
                 }
-              ></input>
+              ></input> */}
+              {/*  */}
+              {userDto.contactCategoryId !== 0 &&
+                userDto.contactCategoryId === 2 && (
+                  <>
+                    <strong>Contact Subcategory:</strong>
+                    <select
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setUserDto({
+                          ...userDto,
+                          name: e.target.value,
+                        });
+                      }}
+                    >
+                      {contactSubCategories &&
+                        contactSubCategories
+                          .filter(
+                            (subCategory) => subCategory.contactCategoryId === 2
+                          )
+                          .map((subCategory) => (
+                            <option
+                              key={subCategory.contactSubCategoryId}
+                              value={subCategory.name}
+                            >
+                              {subCategory.name}
+                            </option>
+                          ))}
+                    </select>
+                  </>
+                )}
+              {userDto.contactCategoryId !== 0 &&
+                userDto.contactCategoryId === 3 && (
+                  <input
+                    type="text"
+                    onChange={(e) =>
+                      setUserDto({
+                        ...userDto,
+                        name: e.target.value,
+                      })
+                    }
+                    value={userDto.name}
+                  ></input>
+                )}
             </span>
           </>
         ) : (
@@ -197,7 +268,15 @@ export default function UserDeatil({
             </span>
             <span>
               <strong>Sub Category: </strong>
-              <input disabled value={userDto.contactSubCategoryId} />
+              <input
+                disabled
+                value={
+                  contactSubCategories.find(
+                    (c) =>
+                      c.contactSubCategoryId == userToShow.contactSubCategoryId
+                  )?.name
+                }
+              />
             </span>
           </>
         )}
